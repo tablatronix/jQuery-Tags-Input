@@ -292,28 +292,44 @@
 				if (settings.autocomplete) {
 					// pass in the autocomplete settings to the autocomplete plugin
 					// provided by jquery UI
-					$(data.fake_input).autocomplete(settings.autocomplete);
 					
-					// if an autocompleteselect handler has been passed in, use that.
-					// otherwise, use our own.
-					if (settings.autocompleteselect) {
-						$(data.fake_input).on('autocompleteselect',data,settings.autocompleteselect);							
-					} else {	
-						$(data.fake_input).on('autocompleteselect',data,function(event,ui) {
-							$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
-							return false;
-						});
-					}
-					
-					// track whether or not the autocomplete is open so we can avoid adding duplicate tags
-					$(data.fake_input).on('autocompleteopen',data,function() {
-						$(this).data('autocompleteopen',true);
-						return false;
-					});
-					$(data.fake_input).on('autocompleteclose',data,function() {
-						$(this).data('autocompleteopen',null);
-						return false;
-					});
+          // Check for jquery UI autocomplete
+          if (jQuery.ui && jQuery.ui.autocomplete !== undefined) {
+            
+            $(data.fake_input).autocomplete(settings.autocomplete);
+            
+            // if an autocompleteselect handler has been passed in, use that.
+            // otherwise, use our own.
+            if (settings.autocompleteselect) {
+              $(data.fake_input).on('autocompleteselect',data,settings.autocompleteselect);							
+            } else {	
+              $(data.fake_input).on('autocompleteselect',data,function(event,ui) {
+                $(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
+                return false;
+              });
+            }
+            
+            // track whether or not the autocomplete is open so we can avoid adding duplicate tags
+            $(data.fake_input).on('autocompleteopen',data,function() {
+              $(this).data('autocompleteopen',true);
+              return false;
+            });
+            $(data.fake_input).on('autocompleteclose',data,function() {
+              $(this).data('autocompleteopen',null);
+              return false;
+            });
+          
+          }
+          // ELSE Check for old jqueryAutocompletePlugin
+          else if (jQuery.Autocompleter !== undefined && settings.autocomplete_url != undefined) {
+						$(data.fake_input).autocomplete(settings.autocomplete_url, settings.autocomplete);
+						$(data.fake_input).bind('result',data,function(event,data,formatted) {
+							if (data) {
+                $(event.data.real_input).addTag(data[0] + "",{focus:true,unique:(settings.unique)});
+							}
+					  	});
+          }
+
 				}
 							
 				// if the user tabs out of the field
