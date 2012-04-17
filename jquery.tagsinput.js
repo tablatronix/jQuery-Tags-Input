@@ -121,17 +121,21 @@
 				}
 				
 				if (value !='' && skipTag != true) { 
+            if(settings.readOnly != true){
                     $('<span>').addClass('tag').append(
                         $('<span>').text(value).append('&nbsp;&nbsp;'),
-                        $('<a>', {
+                          $('<a>', {
                             href  : '#',
                             title : settings.removeText,
                             text  : 'x'
-                        }).click(function () {
+                          }).click(function () {
                             return $(settings.real_input).removeTag(escape(value));
-                        })
+                          })                         
                     ).insertBefore(settings.input_wrapper);
-
+            } else {
+                  $('<span>').addClass('tag').append($('<span>').text(value)).insertBefore(settings.input_wrapper);
+            }
+            
 					tagslist.push(value);
 				
 					$(settings.fake_input).val('');
@@ -221,7 +225,8 @@
 	      onAddTag: null,
 	      onRemoveTag: null,
 	      validateTag: null,
-	      onError: null
+	      onError: null,
+        readOnly:false
 	    },options);
 
 		this.each(function() { 
@@ -229,7 +234,10 @@
 				$(this).hide();				
 			}
 				
-	
+      if(settings.readOnly==true){
+        settings.interactive = false;
+      }
+      
 			var id = internal_counter++;
 			
 			var data = jQuery.extend({
