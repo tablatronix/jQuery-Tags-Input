@@ -122,7 +122,7 @@
 				
 				if (value !='' && skipTag != true) { 
             if(settings.readOnly != true){
-                    $('<span>').addClass('tag').append(
+                    $('<span>').addClass('tag').addClass('tag_' + value).append(
                         $('<span>').text(value).append('&nbsp;&nbsp;'),
                           $('<a>', {
                             href  : '#',
@@ -133,7 +133,7 @@
                           })                         
                     ).insertBefore(settings.input_wrapper);
             } else {
-                  $('<span>').addClass('tag').append($('<span>').text(value)).insertBefore(settings.input_wrapper);
+                  $('<span>').addClass('tag').addClass('tag_' + value).append($('<span>').text(value)).insertBefore(settings.input_wrapper);
                   
             }
             
