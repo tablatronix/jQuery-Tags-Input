@@ -122,7 +122,7 @@
 				
 				
 				if (value !='' && skipTag != true) { 
-						tag_class=value.replace(/\s/g, "_");
+						tag_class=value.replace(/\s/g, "_").toLowerCase();
             if(settings.readOnly != true){
                     $('<span>').addClass('tag').addClass('tag_' + tag_class).append(
                         $('<span>').text(value).append('&nbsp;&nbsp;'),
